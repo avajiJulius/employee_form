@@ -22,13 +22,9 @@ public class DictionaryDaoImpl implements DictionaryDao{
             "WHERE UPPER(course_name) LIKE UPPER(?)";
 
 
-    //TODO refactoring - cteate connect method
+
     private Connection getConnection() throws SQLException {
-        Connection connection = DriverManager.getConnection(
-                Config.getProperties(Config.DB_URL),
-                Config.getProperties(Config.DB_LOGIN),
-                Config.getProperties(Config.DB_PASSWORD));
-        return connection;
+        return ConnectionBuilder.getConnection();
     }
 
     public List<City> findCity(String cityName) throws DaoException{

@@ -40,13 +40,8 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
             "FROM prev_employers AS pe " +
             "WHERE pe.e_form_id IN ";
 
-    //TODO refactoring - create connect method
     private Connection getConnection() throws SQLException {
-        Connection connection = DriverManager.getConnection(
-                Config.getProperties(Config.DB_URL),
-                Config.getProperties(Config.DB_LOGIN),
-                Config.getProperties(Config.DB_PASSWORD));
-        return connection;
+        return ConnectionBuilder.getConnection();
     }
 
     public Long saveEmployeeForm(EmployeeForm ef) throws DaoException {
