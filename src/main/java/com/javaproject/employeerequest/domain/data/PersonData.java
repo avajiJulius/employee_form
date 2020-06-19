@@ -16,6 +16,16 @@ public class PersonData {
     //TODO make mail Class MAil
     private String email;
 
+    public PersonData() {}
+
+    public PersonData(String firstName, String lastName, LocalDate birthDay, String about, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthDay = birthDay;
+        this.about = about;
+        this.email = email;
+    }
+
     public String getFirstName() {
         return firstName;
     }

@@ -1,7 +1,7 @@
 package com.javaproject.employeerequest.domain.data.components;
 
 public enum Profession {
-    UNSELECTED, NANNY, DRIVER;
+    UNSELECTED, NANNY, DRIVER, PROGRAMMER;
 
     public static Profession fromValue(int value) {
         for (Profession p : Profession.values()) {

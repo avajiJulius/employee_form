@@ -3,7 +3,6 @@ package com.javaproject.employeerequest.domain.data;
 import java.time.LocalDate;
 
 public class PreviousEmployerData {
-    private long previousEmployerId;
     private String organization;
     private String position;
     private String progress;
@@ -11,13 +10,16 @@ public class PreviousEmployerData {
     private LocalDate workEnd;
     private String quitReason;
 
-    public long getPreviousEmployerId() {
-        return previousEmployerId;
+    public PreviousEmployerData() {
     }
 
-    public void setPreviousEmployerId(long previousEmployerId) {
-        this.previousEmployerId = previousEmployerId;
+    public PreviousEmployerData(String organization, String position, String progress) {
+        this.organization = organization;
+        this.position = position;
+        this.position = progress;
     }
+
+
 
     public String getOrganization() {
         return organization;

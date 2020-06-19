@@ -22,8 +22,8 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
             "INSERT INTO employee_form(" +
                     "e_form_status, e_form_date, f_name, l_name, b_day, city_id, " +
                     "relocate_status, profession, schedule_status, experience, " +
-                    "prev_employer_id, salary, university_id, course_id, about, mail)" +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+                    "salary, university_id, course_id, about, mail)" +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
     private static final String INSERT_EMPLOYER =
             "INSERT INTO prev_employers(" +
@@ -59,23 +59,21 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
                 statement.setTimestamp(2, java.sql.Timestamp.valueOf(LocalDateTime.now()));
                 statement.setDate(5, java.sql.Date.valueOf(ef.getPersonData().getBirthDay()));
 
-//                PreviousEmployerData ped = ef.getPreviousEmployers();
-//                statement.setInt(11, ef.getPreviousEmployers());
 
                 PersonData person = ef.getPersonData();
                 statement.setString(3, person.getFirstName());
                 statement.setString(4, person.getLastName());
                 statement.setLong(6, person.getCurrentCity().getCityId());
-                statement.setString(15, person.getAbout());
-                statement.setString(16, person.getEmail());
+                statement.setString(14, person.getAbout());
+                statement.setString(15, person.getEmail());
 
                 EmployeeData employee = ef.getEmployeeData();
                 statement.setDouble(10, employee.getExperience());
-                statement.setDouble(12, employee.getSalary());
+                statement.setDouble(11, employee.getSalary());
 
                 EducationData education = ef.getEducation();
-                statement.setLong(13, education.getUniversity().getUniversityId());
-                statement.setLong(14, education.getCourse().getCourseId());
+                statement.setLong(12, education.getUniversity().getUniversityId());
+                statement.setLong(13, education.getCourse().getCourseId());
 
 
                 statement.executeUpdate();
@@ -109,9 +107,20 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
                 statement.setString(5, employer.getPosition());
                 statement.setString(6, employer.getProgress());
                 statement.setString(7, employer.getQuitReason());
+                statement.addBatch();
             }
+            statement.executeBatch();
         }
     }
+
+//    private void savePreviousEmployers(Connection connection, EmployeeForm ef, Long efId) throws SQLException{
+//        try (PreparedStatement statement = connection.prepareStatement(INSERT_EMPLOYER)) {
+//            for (PreviousEmployerData employer : ef.getPreviousEmployers()) {
+//                statement.setLong(1,efId);
+//
+//            }
+//        }
+//    }
 
     public List<EmployeeForm> getEmployeeForm() throws DaoException {
         List<EmployeeForm> result = new LinkedList<>();
@@ -203,12 +212,15 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
 
     private PreviousEmployerData fillPrevEmployerData(ResultSet rs) throws SQLException {
         String organization = rs.getString("organization");
-        LocalDate workStart = rs.getDate("work_start").toLocalDate();
-        LocalDate workEnd = rs.getDate("work_end").toLocalDate();
         String position = rs.getString("position");
         String progress = rs.getString("progress");
-        String quit_reason = rs.getString("quit_reason");
-        PreviousEmployerData ped = new PreviousEmployerData();
+
+        PreviousEmployerData ped = new PreviousEmployerData(organization, position, progress);
+
+        ped.setWorkStart(rs.getDate("work_start").toLocalDate());
+        ped.setWorkEnd(rs.getDate("work_end").toLocalDate());
+        ped.setQuitReason(rs.getString("quit_reason"));
+
 
         return ped;
     }

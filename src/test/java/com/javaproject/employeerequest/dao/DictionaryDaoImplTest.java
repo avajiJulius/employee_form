@@ -1,5 +1,10 @@
 package com.javaproject.employeerequest.dao;
 
+import com.javaproject.employeerequest.domain.data.components.City;
+import com.javaproject.employeerequest.domain.data.components.Course;
+import com.javaproject.employeerequest.domain.data.components.University;
+import com.javaproject.employeerequest.exception.DaoException;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -15,28 +20,25 @@ public class DictionaryDaoImplTest {
 
     @BeforeClass
     public static void startUp() throws Exception {
-        URL url1 = DictionaryDaoImplTest.class.getClassLoader()
-                .getResource("employee_project.sql");
-        URL url2 = DictionaryDaoImplTest.class.getClassLoader()
-                .getResource("employee_data.sql");
-
-        List<String> str1 = Files.readAllLines(Paths.get(url1.toURI()));
-        List<String> str2 = Files.readAllLines(Paths.get(url2.toURI()));
-
-        String sql1 = str1.stream().collect(Collectors.joining());
-        String sql2 = str2.stream().collect(Collectors.joining());
-        try (Connection con = ConnectionBuilder.getConnection();
-             Statement stmt = con.createStatement()) {
-            stmt.executeUpdate(sql1);
-            stmt.executeUpdate(sql2);
-        }
-
+        DBInit.startUp();
     }
 
     @Test
-    public void test1() {
-        System.out.println("Test1");
+    public void testCity() throws DaoException {
+        List<City> cities = new DictionaryDaoImpl().findCity("burg");
+        Assert.assertTrue(cities.size() == 2);
     }
 
+    @Test
+    public void testUniversity() throws DaoException {
+        List<University> uni = new DictionaryDaoImpl().findUniversity("e");
+        Assert.assertTrue(uni.size() == 2);
+    }
+
+    @Test
+    public void testCourse() throws DaoException {
+        List<Course> courses = new DictionaryDaoImpl().findCourse("50");
+        Assert.assertTrue(courses.size() == 1);
+    }
 
 }
