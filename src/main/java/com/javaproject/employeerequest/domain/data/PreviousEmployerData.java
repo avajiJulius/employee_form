@@ -68,4 +68,16 @@ public class PreviousEmployerData {
     public void setQuitReason(String quitReason) {
         this.quitReason = quitReason;
     }
+
+    @Override
+    public String toString() {
+        return "PreviousEmployerData{" +
+                "organization='" + organization + '\'' +
+                ", position='" + position + '\'' +
+                ", progress='" + progress + '\'' +
+                ", workStart=" + workStart +
+                ", workEnd=" + workEnd +
+                ", quitReason='" + quitReason + '\'' +
+                '}';
+    }
 }

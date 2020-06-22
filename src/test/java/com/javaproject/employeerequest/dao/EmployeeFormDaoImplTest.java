@@ -50,7 +50,7 @@ public class EmployeeFormDaoImplTest {
 
 
         EmployeeData ed = new EmployeeData();
-        ed.setProfession(Profession.fromValue(0));
+        ed.setProfession(Profession.fromValue(1));
         ed.setExperience(1.2);
         ed.setSalary(50.700);
         ed.setScheduleStatus(ScheduleStatus.fromValue(1));
@@ -68,10 +68,10 @@ public class EmployeeFormDaoImplTest {
         ped1.setQuitReason("Start work on new restaurant");
 
 
-        PreviousEmployerData ped2 = new PreviousEmployerData("Yat", "administrator", "");
+        PreviousEmployerData ped2 = new PreviousEmployerData("Yat", "administrator", null);
         //Write next two lines because something go wrong and 'position' changed to progress value and 'progress' equals null
         ped2.setPosition("administrator");
-        ped2.setProgress("");
+        ped2.setProgress(null);
         ped2.setWorkStart(LocalDate.of(2018, 9,15));
         ped2.setWorkEnd(LocalDate.of(2020,2,7));
         ped2.setQuitReason("Start programming");

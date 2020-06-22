@@ -81,4 +81,17 @@ public class PersonData {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    @Override
+    public String toString() {
+        return "PersonData{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", birthDay=" + birthDay +
+                ", currentCity=" + currentCity +
+                ", relocateStatus=" + relocateStatus +
+                ", about='" + about + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

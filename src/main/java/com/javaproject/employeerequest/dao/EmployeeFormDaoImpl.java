@@ -8,6 +8,8 @@ import com.javaproject.employeerequest.domain.data.PersonData;
 import com.javaproject.employeerequest.domain.data.PreviousEmployerData;
 import com.javaproject.employeerequest.domain.data.components.*;
 import com.javaproject.employeerequest.exception.DaoException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -18,6 +20,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class EmployeeFormDaoImpl implements EmployeeFormDao {
+
+    private static final Logger logger = LoggerFactory.getLogger(EmployeeFormDaoImpl.class);
+
     private static final String INSERT_FORM =
             "INSERT INTO employee_form(" +
                     "e_form_status, e_form_date, f_name, l_name, b_day, city_id, " +
@@ -46,6 +51,7 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
 
     public Long saveEmployeeForm(EmployeeForm ef) throws DaoException {
         Long result = -1L;
+        logger.debug("EF {}", ef);
 
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(INSERT_FORM, new String[]{"e_form_id"})) {
@@ -92,6 +98,7 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
                 throw ex;
             }
         } catch (SQLException ex) {
+            logger.error(ex.getMessage(), ex);
             throw new DaoException(ex);
         }
         return result;
@@ -139,6 +146,7 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
 
             rs.close();
         } catch (SQLException ex) {
+            logger.error(ex.getMessage(), ex);
             throw new DaoException(ex);
         }
         return result;
@@ -152,7 +160,9 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
         String universityName = rs.getString("university_name");
         University u = new University(universityId, universityName);
         ed.setUniversity(u);
-        Course c = new Course(rs.getLong("course_id"), "");
+        Long courseId = rs.getLong("course_id");
+        String courseName = rs.getString("course_name");
+        Course c = new Course(courseId, courseName);
         ed.setCourse(c);
         return ed;
     }
@@ -162,7 +172,7 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
         ed.setExperience(rs.getDouble("experience"));
         ed.setSalary(rs.getDouble("salary"));
         ed.setProfession(Profession.fromValue(rs.getInt("profession")));
-        ed.setScheduleStatus((ScheduleStatus.fromValue(rs.getInt("schedule_status"))));
+        ed.setScheduleStatus(ScheduleStatus.fromValue(rs.getInt("schedule_status")));
         return ed;
     }
 
@@ -189,7 +199,7 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
 
     private void findPrevEmployers(Connection connection, List<EmployeeForm> result) throws SQLException {
         String pe = "(" + result.stream().map(ef -> String.valueOf(ef.getEmployeeFormId()))
-                .collect(Collectors.joining(",")) + " );";
+                .collect(Collectors.joining(",")) + ")";
 
         Map<Long, EmployeeForm> maps = result.stream().collect(Collectors
                 .toMap(ef -> ef.getEmployeeFormId(), ef -> ef));

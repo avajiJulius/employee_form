@@ -6,6 +6,8 @@ import com.javaproject.employeerequest.domain.data.components.City;
 import com.javaproject.employeerequest.domain.data.components.Course;
 import com.javaproject.employeerequest.domain.data.components.University;
 import com.javaproject.employeerequest.exception.DaoException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 import java.sql.*;
@@ -13,6 +15,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class DictionaryDaoImpl implements DictionaryDao{
+
+    private static final Logger logger = LoggerFactory.getLogger(DictionaryDaoImpl.class);
 
     private static final String GET_CITY = "SELECT city_id, city_name FROM cities " +
             "WHERE UPPER(city_name) LIKE UPPER(?)";
@@ -41,6 +45,7 @@ public class DictionaryDaoImpl implements DictionaryDao{
                 result.add(city);
             }
         } catch (SQLException ex) {
+            logger.error(ex.getMessage(), ex);
             throw new DaoException(ex);
         }
         return result;
@@ -61,6 +66,7 @@ public class DictionaryDaoImpl implements DictionaryDao{
                 result.add(university);
             }
         } catch (SQLException ex) {
+            logger.error(ex.getMessage(), ex);
             throw new DaoException(ex);
         }
         return result;
@@ -81,6 +87,7 @@ public class DictionaryDaoImpl implements DictionaryDao{
                 result.add(course);
             }
         } catch (SQLException ex) {
+            logger.error(ex.getMessage(), ex);
             throw new DaoException(ex);
         }
         return result;

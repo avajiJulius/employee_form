@@ -78,4 +78,16 @@ public class EmployeeForm {
         previousEmployers.add(previousEmployer);
     }
 
+    @Override
+    public String toString() {
+        return "EmployeeForm{" +
+                "employeeFormId=" + employeeFormId +
+                ", status=" + status +
+                ", formDate=" + formDate +
+                ", personData=" + personData +
+                ", employeeData=" + employeeData +
+                ", previousEmployers=" + previousEmployers +
+                ", education=" + education +
+                '}';
+    }
 }
