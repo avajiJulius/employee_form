@@ -7,6 +7,8 @@ import com.javaproject.employeerequest.exception.DaoException;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.nio.file.Files;
@@ -18,6 +20,8 @@ import java.util.stream.Collectors;
 
 public class DictionaryDaoImplTest {
 
+    private static final Logger logger = LoggerFactory.getLogger(DictionaryDaoImplTest.class);
+
     @BeforeClass
     public static void startUp() throws Exception {
         DBInit.startUp();
@@ -25,6 +29,7 @@ public class DictionaryDaoImplTest {
 
     @Test
     public void testCity() throws DaoException {
+        logger.info("Test");
         List<City> cities = new DictionaryDaoImpl().findCity("burg");
         Assert.assertTrue(cities.size() == 2);
     }

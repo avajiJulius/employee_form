@@ -11,6 +11,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -28,7 +29,9 @@ public class EmployeeFormDaoImplTest {
     }
 
     @Test
-    public void getEmployeeForm() {
+    public void getEmployeeForm() throws DaoException {
+        //TODO 
+//        List<EmployeeForm> list = new EmployeeFormDaoImpl().getEmployeeForm();
     }
 
     public static EmployeeForm buildEmployeeForm(long id) {

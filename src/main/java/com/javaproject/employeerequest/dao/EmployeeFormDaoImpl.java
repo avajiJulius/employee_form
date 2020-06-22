@@ -37,7 +37,7 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
             "WHERE e_form_status = ? ORDER BY e_form_date";
 
     private static final String SELECT_PREV_EMPLOYER = "SELECT pe.* " +
-            "FROM prev_employers AS pe " +
+            "FROM prev_employers pe " +
             "WHERE pe.e_form_id IN ";
 
     private Connection getConnection() throws SQLException {
@@ -113,14 +113,7 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
         }
     }
 
-//    private void savePreviousEmployers(Connection connection, EmployeeForm ef, Long efId) throws SQLException{
-//        try (PreparedStatement statement = connection.prepareStatement(INSERT_EMPLOYER)) {
-//            for (PreviousEmployerData employer : ef.getPreviousEmployers()) {
-//                statement.setLong(1,efId);
-//
-//            }
-//        }
-//    }
+
 
     public List<EmployeeForm> getEmployeeForm() throws DaoException {
         List<EmployeeForm> result = new LinkedList<>();
@@ -151,23 +144,7 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
         return result;
     }
 
-    private void findPrevEmployers(Connection connection, List<EmployeeForm> result) throws SQLException {
-            String pe = "(" + result.stream().map(ef -> String.valueOf(ef.getEmployeeFormId()))
-                    .collect(Collectors.joining(",")) + ")";
 
-            Map<Long, EmployeeForm> maps = result.stream().collect(Collectors
-                    .toMap(ef -> ef.getEmployeeFormId(), ef -> ef));
-
-            try(PreparedStatement statement = connection.prepareStatement(SELECT_PREV_EMPLOYER + pe)) {
-                ResultSet rs = statement.executeQuery();
-                while(rs.next()) {
-                    PreviousEmployerData ped = fillPrevEmployerData(rs);
-                    EmployeeForm ef = maps.get(rs.getLong("e_form_id"));
-                    ef.addPreviousEmployers(ped);
-                }
-
-            }
-    }
 
     private EducationData fillEducationData(ResultSet rs) throws SQLException {
         EducationData ed = new EducationData();
@@ -208,6 +185,24 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
         pd.setAbout(rs.getString("about"));
         pd.setEmail(rs.getString("mail"));
         return pd;
+    }
+
+    private void findPrevEmployers(Connection connection, List<EmployeeForm> result) throws SQLException {
+        String pe = "(" + result.stream().map(ef -> String.valueOf(ef.getEmployeeFormId()))
+                .collect(Collectors.joining(",")) + " );";
+
+        Map<Long, EmployeeForm> maps = result.stream().collect(Collectors
+                .toMap(ef -> ef.getEmployeeFormId(), ef -> ef));
+
+        try(PreparedStatement statement = connection.prepareStatement(SELECT_PREV_EMPLOYER + pe)) {
+            ResultSet rs = statement.executeQuery();
+            while(rs.next()) {
+                PreviousEmployerData ped = fillPrevEmployerData(rs);
+                EmployeeForm ef = maps.get(rs.getLong("e_form_id"));
+                ef.addPreviousEmployers(ped);
+            }
+
+        }
     }
 
     private PreviousEmployerData fillPrevEmployerData(ResultSet rs) throws SQLException {
