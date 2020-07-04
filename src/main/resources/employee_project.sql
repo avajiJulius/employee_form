@@ -1,11 +1,8 @@
-DROP TABLE IF EXISTS prev_employers;
+DROP TABLE IF EXISTS last_work;
 DROP TABLE IF EXISTS employee_form;
 DROP TABLE IF EXISTS courses;
 DROP TABLE IF EXISTS universities;
 DROP TABLE IF EXISTS cities;
-
-
-
 
 CREATE TABLE cities (
     city_id integer not null,
@@ -49,8 +46,8 @@ CREATE TABLE employee_form (
 	FOREIGN KEY(city_id) REFERENCES cities(city_id) ON DELETE RESTRICT
 );
 
-CREATE TABLE prev_employers (
-	prev_employer_id SERIAL,
+CREATE TABLE last_work (
+	last_work_id SERIAL,
 	e_form_id integer not null,
 	organization varchar(40) not null,
 	work_start date not null,
@@ -58,8 +55,8 @@ CREATE TABLE prev_employers (
 	position varchar(40) not null,
 	progress text,
 	quit_reason text,
-	PRIMARY KEY(prev_employer_id),
+	PRIMARY KEY(last_work_id),
 	FOREIGN KEY(e_form_id) REFERENCES employee_form(e_form_id) ON DELETE RESTRICT
 );
 
-CREATE INDEX idx_employee_form_id ON prev_employers(e_form_id);
+CREATE INDEX idx_employee_form_id ON last_work(e_form_id)

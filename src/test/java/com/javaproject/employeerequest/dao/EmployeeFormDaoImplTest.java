@@ -4,16 +4,13 @@ import com.javaproject.employeerequest.domain.EmployeeForm;
 import com.javaproject.employeerequest.domain.data.EducationData;
 import com.javaproject.employeerequest.domain.data.EmployeeData;
 import com.javaproject.employeerequest.domain.data.PersonData;
-import com.javaproject.employeerequest.domain.data.PreviousEmployerData;
+import com.javaproject.employeerequest.domain.data.LastWorkData;
 import com.javaproject.employeerequest.domain.data.components.*;
 import com.javaproject.employeerequest.exception.DaoException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.time.LocalDate;
-import java.util.List;
-
-import static org.junit.Assert.*;
 
 public class EmployeeFormDaoImplTest {
 
@@ -59,7 +56,7 @@ public class EmployeeFormDaoImplTest {
         edud.setUniversity(university);
         edud.setCourse(course);
 
-        PreviousEmployerData ped1 = new PreviousEmployerData("Petrusha", "waiter", "senior waiter");
+        LastWorkData ped1 = new LastWorkData("Petrusha", "waiter", "senior waiter");
         //Write next two lines because something go wrong and 'position' changed to progress value and 'progress' equals null
         ped1.setPosition("waiter");
         ped1.setProgress("senior waiter");
@@ -68,7 +65,7 @@ public class EmployeeFormDaoImplTest {
         ped1.setQuitReason("Start work on new restaurant");
 
 
-        PreviousEmployerData ped2 = new PreviousEmployerData("Yat", "administrator", null);
+        LastWorkData ped2 = new LastWorkData("Yat", "administrator", null);
         //Write next two lines because something go wrong and 'position' changed to progress value and 'progress' equals null
         ped2.setPosition("administrator");
         ped2.setProgress(null);

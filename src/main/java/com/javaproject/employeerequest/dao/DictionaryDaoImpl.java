@@ -1,7 +1,6 @@
 package com.javaproject.employeerequest.dao;
 
 
-import com.javaproject.employeerequest.config.Config;
 import com.javaproject.employeerequest.domain.data.components.City;
 import com.javaproject.employeerequest.domain.data.components.Course;
 import com.javaproject.employeerequest.domain.data.components.University;

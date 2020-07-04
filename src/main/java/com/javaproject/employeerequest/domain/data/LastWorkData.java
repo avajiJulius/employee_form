@@ -2,7 +2,7 @@ package com.javaproject.employeerequest.domain.data;
 
 import java.time.LocalDate;
 
-public class PreviousEmployerData {
+public class LastWorkData {
     private String organization;
     private String position;
     private String progress;
@@ -10,10 +10,10 @@ public class PreviousEmployerData {
     private LocalDate workEnd;
     private String quitReason;
 
-    public PreviousEmployerData() {
+    public LastWorkData() {
     }
 
-    public PreviousEmployerData(String organization, String position, String progress) {
+    public LastWorkData(String organization, String position, String progress) {
         this.organization = organization;
         this.position = position;
         this.position = progress;

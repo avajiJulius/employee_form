@@ -1,18 +1,16 @@
 package com.javaproject.employeerequest.dao;
 
-import com.javaproject.employeerequest.config.Config;
 import com.javaproject.employeerequest.domain.EmployeeForm;
 import com.javaproject.employeerequest.domain.data.EducationData;
 import com.javaproject.employeerequest.domain.data.EmployeeData;
 import com.javaproject.employeerequest.domain.data.PersonData;
-import com.javaproject.employeerequest.domain.data.PreviousEmployerData;
+import com.javaproject.employeerequest.domain.data.LastWorkData;
 import com.javaproject.employeerequest.domain.data.components.*;
 import com.javaproject.employeerequest.exception.DaoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,8 +28,8 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
                     "salary, university_id, course_id, about, mail)" +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
-    private static final String INSERT_EMPLOYER =
-            "INSERT INTO prev_employers(" +
+    private static final String INSERT_WORK =
+            "INSERT INTO last_work(" +
             "e_form_id, organization, work_start, " +
             "work_end, position, progress, quit_reason)" +
             "VALUES (?, ?, ?, ?, ?, ?, ?);";
@@ -41,9 +39,9 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
             "INNER JOIN universities us ON us.university_id = ef.university_id " +
             "WHERE e_form_status = ? ORDER BY e_form_date";
 
-    private static final String SELECT_PREV_EMPLOYER = "SELECT pe.* " +
-            "FROM prev_employers pe " +
-            "WHERE pe.e_form_id IN ";
+    private static final String SELECT_LAST_WORK = "SELECT lw.* " +
+            "FROM last_work lw " +
+            "WHERE lw.e_form_id IN ";
 
     private Connection getConnection() throws SQLException {
         return ConnectionBuilder.getConnection();
@@ -89,7 +87,7 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
                     result = resultSet.getLong(1);
                 resultSet.close();
 
-                savePreviousEmployers(connection, ef, result);
+                saveLastWork(connection, ef, result);
 
                 connection.commit();
 
@@ -104,16 +102,16 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
         return result;
     }
 
-    private void savePreviousEmployers(Connection connection, EmployeeForm ef, Long efId) throws SQLException{
-        try (PreparedStatement statement = connection.prepareStatement(INSERT_EMPLOYER)) {
-            for (PreviousEmployerData employer : ef.getPreviousEmployers()) {
+    private void saveLastWork(Connection connection, EmployeeForm ef, Long efId) throws SQLException{
+        try (PreparedStatement statement = connection.prepareStatement(INSERT_WORK)) {
+            for (LastWorkData lastWork : ef.getLastWork()) {
                 statement.setLong(1, efId);
-                statement.setString(2,employer.getOrganization());
-                statement.setDate(3, java.sql.Date.valueOf(employer.getWorkStart()));
-                statement.setDate(4, java.sql.Date.valueOf(employer.getWorkEnd()));
-                statement.setString(5, employer.getPosition());
-                statement.setString(6, employer.getProgress());
-                statement.setString(7, employer.getQuitReason());
+                statement.setString(2,lastWork.getOrganization());
+                statement.setDate(3, java.sql.Date.valueOf(lastWork.getWorkStart()));
+                statement.setDate(4, java.sql.Date.valueOf(lastWork.getWorkEnd()));
+                statement.setString(5, lastWork.getPosition());
+                statement.setString(6, lastWork.getProgress());
+                statement.setString(7, lastWork.getQuitReason());
                 statement.addBatch();
             }
             statement.executeBatch();
@@ -142,7 +140,7 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
 
                 result.add(ef);
             }
-            findPrevEmployers(connection, result);
+            findLastWork(connection, result);
 
             rs.close();
         } catch (SQLException ex) {
@@ -197,17 +195,17 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
         return pd;
     }
 
-    private void findPrevEmployers(Connection connection, List<EmployeeForm> result) throws SQLException {
+    private void findLastWork(Connection connection, List<EmployeeForm> result) throws SQLException {
         String pe = "(" + result.stream().map(ef -> String.valueOf(ef.getEmployeeFormId()))
                 .collect(Collectors.joining(",")) + ")";
 
         Map<Long, EmployeeForm> maps = result.stream().collect(Collectors
                 .toMap(ef -> ef.getEmployeeFormId(), ef -> ef));
 
-        try(PreparedStatement statement = connection.prepareStatement(SELECT_PREV_EMPLOYER + pe)) {
+        try(PreparedStatement statement = connection.prepareStatement(SELECT_LAST_WORK + pe)) {
             ResultSet rs = statement.executeQuery();
             while(rs.next()) {
-                PreviousEmployerData ped = fillPrevEmployerData(rs);
+                LastWorkData ped = fillLastWorkData(rs);
                 EmployeeForm ef = maps.get(rs.getLong("e_form_id"));
                 ef.addPreviousEmployers(ped);
             }
@@ -215,12 +213,12 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
         }
     }
 
-    private PreviousEmployerData fillPrevEmployerData(ResultSet rs) throws SQLException {
+    private LastWorkData fillLastWorkData(ResultSet rs) throws SQLException {
         String organization = rs.getString("organization");
         String position = rs.getString("position");
         String progress = rs.getString("progress");
 
-        PreviousEmployerData ped = new PreviousEmployerData(organization, position, progress);
+        LastWorkData ped = new LastWorkData(organization, position, progress);
 
         ped.setWorkStart(rs.getDate("work_start").toLocalDate());
         ped.setWorkEnd(rs.getDate("work_end").toLocalDate());
