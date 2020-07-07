@@ -2,7 +2,6 @@ package com.javaproject.employeerequest;
 
 
 import com.javaproject.employeerequest.dao.DictionaryDaoImpl;
-import com.javaproject.employeerequest.domain.EmployeeForm;
 import com.javaproject.employeerequest.domain.data.components.City;
 import com.javaproject.employeerequest.domain.data.components.Course;
 import com.javaproject.employeerequest.domain.data.components.University;

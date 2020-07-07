@@ -1,6 +1,5 @@
 package com.javaproject.employeerequest.dao;
 
-import com.javaproject.employeerequest.domain.EmployeeForm;
 import com.javaproject.employeerequest.domain.data.EducationData;
 import com.javaproject.employeerequest.domain.data.EmployeeData;
 import com.javaproject.employeerequest.domain.data.PersonData;

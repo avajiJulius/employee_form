@@ -1,6 +1,5 @@
 package com.javaproject.employeerequest.dao;
 
-import com.javaproject.employeerequest.domain.EmployeeForm;
 import com.javaproject.employeerequest.domain.data.EducationData;
 import com.javaproject.employeerequest.domain.data.EmployeeData;
 import com.javaproject.employeerequest.domain.data.PersonData;
@@ -56,13 +55,13 @@ public class EmployeeFormDaoImplTest {
         edud.setUniversity(university);
         edud.setCourse(course);
 
-        LastWorkData ped1 = new LastWorkData("Petrusha", "waiter", "senior waiter");
-        //Write next two lines because something go wrong and 'position' changed to progress value and 'progress' equals null
-        ped1.setPosition("waiter");
-        ped1.setProgress("senior waiter");
-        ped1.setWorkStart(LocalDate.of(2018, 4,27));
-        ped1.setWorkEnd(LocalDate.of(2018,9,3));
-        ped1.setQuitReason("Start work on new restaurant");
+//        LastWorkData ped1 = new LastWorkData("Petrusha", "waiter", "senior waiter");
+//        //Write next two lines because something go wrong and 'position' changed to progress value and 'progress' equals null
+//        ped1.setPosition("waiter");
+//        ped1.setProgress("senior waiter");
+//        ped1.setWorkStart(LocalDate.of(2018, 4,27));
+//        ped1.setWorkEnd(LocalDate.of(2018,9,3));
+//        ped1.setQuitReason("Start work on new restaurant");
 
 
         LastWorkData ped2 = new LastWorkData("Yat", "administrator", null);
@@ -77,7 +76,7 @@ public class EmployeeFormDaoImplTest {
         ef.setPersonData(pd);
         ef.setEmployeeData(ed);
         ef.setEducation(edud);
-        ef.addPreviousEmployers(ped1);
+//        ef.addPreviousEmployers(ped1);
         ef.addPreviousEmployers(ped2);
 
         return ef;
